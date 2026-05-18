@@ -1,6 +1,6 @@
 export interface Product {
   id: string
-  category: "panel" | "battery" | "inverter" | "fencing" | "accessory"
+  category: string
   productName: string
   companyName: string
   powerRating: string

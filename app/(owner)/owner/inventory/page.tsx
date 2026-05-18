@@ -4,7 +4,7 @@ import { useEffect, useState } from "react"
 import { addProduct, getLowStockProducts, getProducts } from "@/lib/products"
 
 export default function InventoryPage() {
-  const [category, setCategory] = useState<"panel" | "battery" | "inverter" | "fencing" | "accessory">("panel")
+  const [category, setCategory] = useState("")
   const [productName, setProductName] = useState("")
   const [companyName, setCompanyName] = useState("")
   const [powerRating, setPowerRating] = useState("")
@@ -24,11 +24,24 @@ export default function InventoryPage() {
   }, [])
 
   const handleAddProduct = () => {
-    if (!productName.trim() || !companyName.trim()) return
+    if (!category.trim()) {
+      alert("Enter product category")
+      return
+    }
+
+    if (!productName.trim()) {
+      alert("Enter product name")
+      return
+    }
+
+    if (!companyName.trim()) {
+      alert("Enter company name")
+      return
+    }
 
     const newProduct = {
       id: Date.now().toString(),
-      category,
+      category: category.trim(),
       productName: productName.trim(),
       companyName: companyName.trim(),
       powerRating: powerRating.trim(),
@@ -39,7 +52,7 @@ export default function InventoryPage() {
 
     addProduct(newProduct)
 
-    setCategory("panel")
+    setCategory("")
     setProductName("")
     setCompanyName("")
     setPowerRating("")
@@ -53,27 +66,20 @@ export default function InventoryPage() {
     <div className="space-y-8">
       <div className="rounded-xl bg-slate-800 p-6">
         <h1 className="text-2xl font-bold text-white">Inventory</h1>
-        <p className="mt-2 text-slate-300">Manage stock, company name and power rating</p>
+        <p className="mt-2 text-slate-300">
+          Manage stock, company name and power rating.
+        </p>
       </div>
 
       <div className="space-y-4 rounded-xl bg-slate-800 p-6">
         <h2 className="text-xl font-semibold text-white">Add Product</h2>
 
-        <select
+        <input
           value={category}
-          onChange={(e) =>
-            setCategory(
-              e.target.value as "panel" | "battery" | "inverter" | "fencing" | "accessory"
-            )
-          }
+          onChange={(e) => setCategory(e.target.value)}
+          placeholder="Category, example: Solar Panel, Battery, Wire, Structure"
           className="w-full rounded-md bg-white px-4 py-3 text-black"
-        >
-          <option value="panel">Panel</option>
-          <option value="battery">Battery</option>
-          <option value="inverter">Inverter</option>
-          <option value="fencing">Fencing</option>
-          <option value="accessory">Accessory</option>
-        </select>
+        />
 
         <input
           value={productName}
@@ -97,6 +103,7 @@ export default function InventoryPage() {
         />
 
         <input
+          type="number"
           value={stock}
           onChange={(e) => setStock(e.target.value)}
           placeholder="Stock Quantity"
@@ -104,6 +111,7 @@ export default function InventoryPage() {
         />
 
         <input
+          type="number"
           value={unitPrice}
           onChange={(e) => setUnitPrice(e.target.value)}
           placeholder="Unit Price"
@@ -111,6 +119,7 @@ export default function InventoryPage() {
         />
 
         <input
+          type="number"
           value={lowStockAlert}
           onChange={(e) => setLowStockAlert(e.target.value)}
           placeholder="Low Stock Alert"
@@ -132,8 +141,14 @@ export default function InventoryPage() {
           <p className="text-slate-400">No low stock alerts.</p>
         ) : (
           lowStockProducts.map((product) => (
-            <div key={product.id} className="rounded-lg border border-red-500/40 p-4">
+            <div
+              key={product.id}
+              className="rounded-lg border border-red-500/40 p-4"
+            >
               <p className="font-semibold text-white">{product.productName}</p>
+              <p className="mt-1 text-sm text-slate-300">
+                Category: {product.category || "-"}
+              </p>
               <p className="mt-1 text-sm text-slate-300">
                 Company: {product.companyName}
               </p>
@@ -155,14 +170,29 @@ export default function InventoryPage() {
           <p className="text-slate-400">No products added yet.</p>
         ) : (
           products.map((product) => (
-            <div key={product.id} className="rounded-lg border border-slate-700 p-4">
+            <div
+              key={product.id}
+              className="rounded-lg border border-slate-700 p-4"
+            >
               <p className="font-semibold text-white">{product.productName}</p>
-              <p className="mt-1 text-sm text-slate-300">Category: {product.category}</p>
-              <p className="mt-1 text-sm text-slate-300">Company: {product.companyName}</p>
-              <p className="mt-1 text-sm text-slate-300">Power Rating: {product.powerRating || "-"}</p>
-              <p className="mt-1 text-sm text-slate-300">Stock: {product.stock}</p>
-              <p className="mt-1 text-sm text-slate-300">Unit Price: ₹{product.unitPrice}</p>
-              <p className="mt-1 text-sm text-slate-400">Low Alert: {product.lowStockAlert}</p>
+              <p className="mt-1 text-sm text-slate-300">
+                Category: {product.category || "-"}
+              </p>
+              <p className="mt-1 text-sm text-slate-300">
+                Company: {product.companyName}
+              </p>
+              <p className="mt-1 text-sm text-slate-300">
+                Power Rating: {product.powerRating || "-"}
+              </p>
+              <p className="mt-1 text-sm text-slate-300">
+                Stock: {product.stock}
+              </p>
+              <p className="mt-1 text-sm text-slate-300">
+                Unit Price: ₹{product.unitPrice}
+              </p>
+              <p className="mt-1 text-sm text-slate-400">
+                Low Alert: {product.lowStockAlert}
+              </p>
             </div>
           ))
         )}

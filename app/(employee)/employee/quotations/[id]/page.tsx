@@ -1,12 +1,26 @@
 "use client"
 
+import { useEffect, useState } from "react"
 import { getQuotationById } from "@/lib/quotations"
 import { downloadElementAsPdf } from "@/lib/pdf"
 import { useParams } from "next/navigation"
+import { Quotation } from "@/types/quotation"
 
 export default function EmployeeQuotationViewPage() {
   const params = useParams()
-  const quotation = getQuotationById(params.id as string)
+  const [mounted, setMounted] = useState(false)
+  const [quotation, setQuotation] = useState<Quotation | null>(null)
+
+  useEffect(() => {
+    setMounted(true)
+
+    if (params.id) {
+      const foundQuotation = getQuotationById(params.id as string)
+      setQuotation(foundQuotation || null)
+    }
+  }, [params.id])
+
+  if (!mounted) return null
 
   if (!quotation) {
     return (
@@ -17,123 +31,523 @@ export default function EmployeeQuotationViewPage() {
   }
 
   return (
-    <div className="bg-slate-100 p-8">
-      <div id="quotation-pdf" className="mx-auto max-w-5xl bg-white p-8 text-black">
-        <div className="border-b pb-4">
-          <div className="flex items-start justify-between gap-6">
-            <div className="flex items-start gap-4">
+    <div className="bg-slate-100 p-6">
+      <div
+        id="quotation-pdf"
+        className="mx-auto bg-white text-black"
+        style={{
+          width: "794px",
+          minHeight: "1123px",
+          padding: "34px 54px 34px 54px",
+          fontFamily: '"Times New Roman", Times, serif',
+          boxSizing: "border-box",
+        }}
+      >
+        <div>
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: "245px 1fr",
+              columnGap: "34px",
+              alignItems: "start",
+            }}
+          >
+            <div>
               <img
                 src="/logo.png"
                 alt="Nagaon Solar House Logo"
-                className="h-22 w-22 object-contain"
+                style={{
+                  width: "220px",
+                  height: "100px",
+                  objectFit: "contain",
+                  display: "block",
+                }}
               />
-              <div>
-                <h1 className="text-3xl font-bold">Nagaon Solar House</h1>
-                <p className="mt-1 text-sm">M.D. Road, Nagaon, Assam - 782001</p>
-                <p className="text-sm">GSTIN/UIN: 18AKQPB5642P1ZJ</p>
-                <p className="text-sm">Contact: +91-XXXXXXXXXX</p>
+              <div
+                style={{
+                  marginTop: "6px",
+                  fontSize: "12px",
+                  lineHeight: "1.2",
+                  fontWeight: 700,
+                  textAlign: "left",
+                }}
+              >
+                <div>M.D. Road, Nagaon – 782001, Assam</div>
+                <div>Ph. No: - 9435160149(M), 03672231191(Fax)</div>
               </div>
             </div>
 
-            <div className="text-right">
-              <p className="text-sm font-semibold">No.: {quotation.quotationNo}</p>
-              <p className="text-sm">Date: {quotation.date}</p>
+            <div
+              style={{
+                width: "100%",
+                display: "flex",
+                justifyContent: "flex-end",
+              }}
+            >
+              <div
+                style={{
+                  width: "320px",
+                  textAlign: "left",
+                }}
+              >
+                <div
+                  style={{
+                    color: "#d40000",
+                    fontWeight: 800,
+                    fontSize: "24px",
+                    lineHeight: "1.02",
+                  }}
+                >
+                  Nagaon Solar House
+                </div>
+
+                <div
+                  style={{
+                    color: "#d40000",
+                    fontWeight: 800,
+                    fontSize: "13px",
+                    lineHeight: "1.15",
+                    marginTop: "3px",
+                  }}
+                >
+                  MSME Registered Energy Enterprise
+                </div>
+
+                <div
+                  style={{
+                    fontSize: "13px",
+                    lineHeight: "1.22",
+                    fontWeight: 700,
+                    marginTop: "6px",
+                  }}
+                >
+                  <div>M.D. Road,</div>
+                  <div>Near Civil Hospital Rail Gate</div>
+                  <div>Nagaon – 782001, Assam</div>
+                  <div>
+                    Email:{" "}
+                    <span
+                      style={{
+                        color: "#1d4ed8",
+                        textDecoration: "underline",
+                      }}
+                    >
+                      nagaonsolarhouse@gmail.com
+                    </span>
+                  </div>
+                  <div>
+                    WebSite:{" "}
+                    <span
+                      style={{
+                        color: "#1d4ed8",
+                        textDecoration: "underline",
+                      }}
+                    >
+                      www.nagaonsolarhouse.in
+                    </span>
+                  </div>
+                  <div>GSTN: - 18AKQPB5642P1ZJ</div>
+                </div>
+              </div>
             </div>
+          </div>
+
+          <div
+            style={{
+              marginTop: "8px",
+              textAlign: "center",
+              fontSize: "16px",
+              fontWeight: 800,
+              lineHeight: "1.05",
+            }}
+          >
+            GeM Seller ID: 4879200001090870
+          </div>
+
+          <div
+            style={{
+              marginTop: "4px",
+              textAlign: "center",
+              fontSize: "16px",
+              fontWeight: 800,
+              color: "#d40000",
+              lineHeight: "1.05",
+            }}
+          >
+            AN ISO 9001:2008 CERTIFIED ORGANIZATION
+          </div>
+
+          <div
+            style={{
+              marginTop: "10px",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+              fontSize: "13px",
+              fontWeight: 800,
+            }}
+          >
+            <div>No.: {quotation.quotationNo}</div>
+            <div
+              style={{
+                fontSize: "14px",
+                fontWeight: 800,
+                textDecoration: "underline",
+                textUnderlineOffset: "2px",
+              }}
+            >
+              QUOTATION
+            </div>
+            <div>Date: {quotation.date}</div>
           </div>
         </div>
 
-        <div className="mt-6">
-          <h2 className="text-center text-2xl font-bold tracking-wide">QUOTATION</h2>
+        <div style={{ marginTop: "26px", fontSize: "14px", lineHeight: "1.35" }}>
+          <div style={{ fontWeight: 700 }}>To,</div>
+          <div
+            style={{
+              marginTop: "10px",
+              paddingLeft: "34px",
+              whiteSpace: "pre-line",
+            }}
+          >
+            {quotation.toWhom}
+          </div>
         </div>
 
-        <div className="mt-6">
-          <p className="font-semibold">To,</p>
-          <p className="mt-1 whitespace-pre-line">{quotation.toWhom}</p>
+        <div style={{ marginTop: "18px", fontSize: "14px", lineHeight: "1.35" }}>
+          <span style={{ fontWeight: 700 }}>Sub: </span>
+          <span>{quotation.subject}</span>
         </div>
 
-        <div className="mt-6">
-          <p>
-            <span className="font-semibold">Sub:</span> {quotation.subject}
-          </p>
-        </div>
-
-        <div className="mt-6 overflow-x-auto">
-          <table className="w-full border-collapse border border-black text-sm">
+        <div style={{ marginTop: "6px" }}>
+          <table
+            style={{
+              width: "100%",
+              borderCollapse: "collapse",
+              fontSize: "13px",
+              tableLayout: "fixed",
+            }}
+          >
             <thead>
               <tr>
-                <th className="border border-black px-3 py-2">Sl. No.</th>
-                <th className="border border-black px-3 py-2">Items</th>
-                <th className="border border-black px-3 py-2">Qty</th>
-                <th className="border border-black px-3 py-2">Unit</th>
-                <th className="border border-black px-3 py-2">Rate Offered (Rs.)</th>
-                <th className="border border-black px-3 py-2">Total Value With GST</th>
+                <th
+                  style={{
+                    border: "1px solid #000",
+                    padding: "6px 4px",
+                    textAlign: "center",
+                    width: "58px",
+                    lineHeight: "1.05",
+                    fontWeight: 700,
+                    verticalAlign: "middle",
+                  }}
+                >
+                  Sl.
+                  <br />
+                  No.
+                </th>
+
+                <th
+                  style={{
+                    border: "1px solid #000",
+                    padding: "6px 6px",
+                    textAlign: "center",
+                    width: "300px",
+                    fontWeight: 700,
+                    verticalAlign: "middle",
+                  }}
+                >
+                  Items
+                </th>
+
+                <th
+                  style={{
+                    border: "1px solid #000",
+                    padding: "6px 4px",
+                    textAlign: "center",
+                    width: "56px",
+                    fontWeight: 700,
+                    verticalAlign: "middle",
+                  }}
+                >
+                  Qty
+                </th>
+
+                <th
+                  style={{
+                    border: "1px solid #000",
+                    padding: "6px 4px",
+                    textAlign: "center",
+                    width: "58px",
+                    fontWeight: 700,
+                    verticalAlign: "middle",
+                  }}
+                >
+                  Unit
+                </th>
+
+                <th
+                  style={{
+                    border: "1px solid #000",
+                    padding: "6px 4px",
+                    textAlign: "center",
+                    width: "118px",
+                    lineHeight: "1.05",
+                    fontWeight: 700,
+                    verticalAlign: "middle",
+                  }}
+                >
+                  Rate Offered
+                  <br />
+                  (Rs.)
+                </th>
+
+                <th
+                  style={{
+                    border: "1px solid #000",
+                    padding: "6px 4px",
+                    textAlign: "center",
+                    width: "138px",
+                    lineHeight: "1.05",
+                    fontWeight: 700,
+                    verticalAlign: "middle",
+                  }}
+                >
+                  Total Value
+                  <br />
+                  With GST
+                </th>
               </tr>
             </thead>
+
             <tbody>
               {quotation.items.map((item, index) => (
                 <tr key={item.id}>
-                  <td className="border border-black px-3 py-2 text-center">
+                  <td
+                    style={{
+                      border: "1px solid #000",
+                      padding: "4px 4px",
+                      textAlign: "center",
+                      verticalAlign: "middle",
+                      lineHeight: "1.2",
+                    }}
+                  >
                     {String(index + 1).padStart(2, "0")}
                   </td>
-                  <td className="border border-black px-3 py-2">{item.itemName}</td>
-                  <td className="border border-black px-3 py-2 text-center">{item.qty}</td>
-                  <td className="border border-black px-3 py-2 text-center">{item.unit}</td>
-                  <td className="border border-black px-3 py-2 text-right">
-                    {item.rate.toFixed(2)}
+
+                  <td
+                    style={{
+                      border: "1px solid #000",
+                      padding: "4px 6px",
+                      verticalAlign: "middle",
+                      wordBreak: "break-word",
+                      lineHeight: "1.2",
+                    }}
+                  >
+                    {item.itemName}
                   </td>
-                  <td className="border border-black px-3 py-2 text-right">
-                    {item.total.toFixed(2)}
+
+                  <td
+                    style={{
+                      border: "1px solid #000",
+                      padding: "4px 4px",
+                      textAlign: "center",
+                      verticalAlign: "middle",
+                      lineHeight: "1.2",
+                    }}
+                  >
+                    {String(item.qty).padStart(2, "0")}
+                  </td>
+
+                  <td
+                    style={{
+                      border: "1px solid #000",
+                      padding: "4px 4px",
+                      textAlign: "center",
+                      verticalAlign: "middle",
+                      lineHeight: "1.2",
+                    }}
+                  >
+                    {item.unit}
+                  </td>
+
+                  <td
+                    style={{
+                      border: "1px solid #000",
+                      padding: "4px 6px",
+                      textAlign: "right",
+                      verticalAlign: "middle",
+                      lineHeight: "1.2",
+                    }}
+                  >
+                    {item.rate.toLocaleString("en-IN", {
+                      minimumFractionDigits: 2,
+                      maximumFractionDigits: 2,
+                    })}
+                  </td>
+
+                  <td
+                    style={{
+                      border: "1px solid #000",
+                      padding: "4px 6px",
+                      textAlign: "right",
+                      verticalAlign: "middle",
+                      lineHeight: "1.2",
+                    }}
+                  >
+                    {item.total.toLocaleString("en-IN", {
+                      minimumFractionDigits: 2,
+                      maximumFractionDigits: 2,
+                    })}
                   </td>
                 </tr>
               ))}
 
               <tr>
-                <td colSpan={5} className="border border-black px-3 py-2 text-right font-semibold">
+                <td
+                  colSpan={5}
+                  style={{
+                    border: "1px solid #000",
+                    padding: "4px 6px",
+                    textAlign: "right",
+                    fontWeight: 700,
+                    fontSize: "13px",
+                    lineHeight: "1.2",
+                  }}
+                >
                   Total
                 </td>
-                <td className="border border-black px-3 py-2 text-right font-semibold">
-                  {quotation.subtotal.toFixed(2)}
+                <td
+                  style={{
+                    border: "1px solid #000",
+                    padding: "4px 6px",
+                    textAlign: "right",
+                    fontWeight: 700,
+                    fontSize: "13px",
+                    lineHeight: "1.2",
+                  }}
+                >
+                  {quotation.subtotal.toLocaleString("en-IN", {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2,
+                  })}
                 </td>
               </tr>
 
               <tr>
-                <td colSpan={5} className="border border-black px-3 py-2 text-right font-semibold">
+                <td
+                  colSpan={5}
+                  style={{
+                    border: "1px solid #000",
+                    padding: "4px 6px",
+                    textAlign: "right",
+                    fontWeight: 700,
+                    fontSize: "13px",
+                    lineHeight: "1.2",
+                  }}
+                >
                   Round Off (+{quotation.roundOff.toFixed(2)})
                 </td>
-                <td className="border border-black px-3 py-2 text-right font-semibold">
-                  {quotation.roundedTotal.toFixed(2)}
+                <td
+                  style={{
+                    border: "1px solid #000",
+                    padding: "4px 6px",
+                    textAlign: "right",
+                    fontWeight: 700,
+                    fontSize: "13px",
+                    lineHeight: "1.2",
+                  }}
+                >
+                  {quotation.roundedTotal.toLocaleString("en-IN", {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2,
+                  })}
                 </td>
               </tr>
             </tbody>
           </table>
         </div>
 
-        <div className="mt-4">
-          <p className="font-semibold">({quotation.amountInWords})</p>
+        <div
+          style={{
+            marginTop: "8px",
+            textAlign: "center",
+            fontSize: "13px",
+            fontWeight: 700,
+          }}
+        >
+          (
+          {quotation.amountInWords
+            .replace("Rupees ", "Rs. ")
+            .replace(" Only", " Only")}
+          )
         </div>
 
-        <div className="mt-8">
-          <h3 className="font-bold">TERMS AND CONDITIONS</h3>
-          <ol className="mt-2 list-decimal pl-6 text-sm">
+        <div style={{ marginTop: "28px" }}>
+          <div
+            style={{
+              textAlign: "center",
+              fontSize: "14px",
+              fontWeight: 700,
+              textDecoration: "underline",
+              textUnderlineOffset: "2px",
+            }}
+          >
+            TERMS AND CONDITIONS
+          </div>
+
+          <ol
+            style={{
+              marginTop: "12px",
+              paddingLeft: "56px",
+              fontSize: "13px",
+              lineHeight: "1.45",
+              fontWeight: 700,
+            }}
+          >
             <li>The quoted price is exclusive of all taxes.</li>
             <li>The offer is valid for 60 days.</li>
             <li>Completion period 20 days.</li>
-            <li>Payment Terms: 100% Advance.</li>
+            <li>Payment Terms:-100% Advance</li>
             <li>Standard force majeure will be applicable.</li>
           </ol>
         </div>
 
-        <div className="mt-12 flex justify-between">
-          <div />
-          <div className="text-right">
-            <p>Regards,</p>
-            <p className="mt-10 font-semibold">(Biman Borah)</p>
-            <p>For, Nagaon Solar House</p>
+        <div
+          style={{
+            marginTop: "92px",
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "flex-end",
+          }}
+        >
+          <div style={{ fontSize: "14px", fontWeight: 700 }}>Regards,</div>
+
+          <div
+            style={{
+              textAlign: "right",
+              fontSize: "14px",
+              fontWeight: 700,
+            }}
+          >
+            <div style={{ marginTop: "46px" }}>(Biman Borah)</div>
+            <div>For, Nagaon Solar House</div>
           </div>
+        </div>
+
+        <div
+          style={{
+            marginTop: "10px",
+            textAlign: "right",
+            fontSize: "11px",
+            color: "#555",
+          }}
+        >
+          1 | P a g e
         </div>
       </div>
 
-      <div className="mx-auto mt-8 flex max-w-5xl gap-3">
+      <div className="print-actions mx-auto mt-6 flex w-[794px] gap-3">
         <button
           onClick={() => window.print()}
           className="rounded-md bg-blue-600 px-5 py-3 text-white"

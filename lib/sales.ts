@@ -15,6 +15,20 @@ export const addSale = (sale: Sale) => {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(sales))
 }
 
+export const updateSale = (updatedSale: Sale) => {
+  if (typeof window === "undefined") return
+  const sales = getSales().map((sale) =>
+    sale.id === updatedSale.id ? updatedSale : sale
+  )
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(sales))
+}
+
+export const deleteSale = (saleId: string) => {
+  if (typeof window === "undefined") return
+  const sales = getSales().filter((sale) => sale.id !== saleId)
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(sales))
+}
+
 export const getSalesByEmployee = (employeeId: string) => {
   return getSales().filter((sale) => sale.soldByEmployeeId === employeeId)
 }
