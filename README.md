@@ -1,36 +1,126 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# NSH SolarOps
 
-## Getting Started
+NSH SolarOps is a solar business operations web application built for managing the daily workflow of **Nagaon Solar House**. The app helps owners and employees manage employees, attendance, inventory, customers, quotations, tax invoices, retail sales, printable sales bills, and reports from one dashboard.
 
-First, run the development server:
+## Project Overview
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+This project was created as a business management system for a solar products and services company. It includes separate owner and employee workflows so that business operations can be managed in an organized way.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+The system is currently built using local browser storage for data handling, making it suitable for testing, demonstration, and initial deployment. A database such as Supabase can be integrated later for real multi-user production use.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Features
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### Owner Panel
 
-## Learn More
+- Owner dashboard
+- Employee management
+- Attendance tracking
+- Customer management
+- Project management
+- Inventory management
+- Quotation management
+- Tax invoice management
+- Sales tracking
+- Work board
+- Reports overview
 
-To learn more about Next.js, take a look at the following resources:
+### Employee Panel
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- Employee dashboard
+- Customer entry and search
+- Inventory stock view
+- Quotation generation
+- Sales entry
+- Multi-product sales billing
+- Product-wise warranty entry
+- Printable customer sales bill
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### Inventory Module
 
-## Deploy on Vercel
+- Add products manually
+- Manual product category entry
+- Company name
+- Product name
+- Power rating
+- Stock quantity
+- Unit price
+- Low stock alert
+- Stock reduction after sales
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### Sales Module
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- Search customer by name
+- Add new customer during sale
+- Search products by category, company, product name, or power rating
+- Add multiple products in one sale
+- Product-wise quantity
+- Product-wise warranty duration
+- Warranty in months or years
+- Automatic total amount calculation
+- Paid amount and balance calculation
+- Payment status: paid, partial, unpaid
+- Automatic stock reduction
+- Printable customer sales bill
+
+### Quotation Module
+
+- Owner and employee quotation generation
+- Add multiple quotation items
+- Quantity, unit, rate, and total calculation
+- Automatic subtotal
+- Automatic round-off
+- Amount in words
+- Professional quotation print layout
+- PDF/print support
+
+### Tax Invoice Module
+
+- Tax invoice creation
+- Item-wise invoice details
+- GST calculation support
+- Printable invoice view
+
+## Tech Stack
+
+- Next.js
+- React
+- TypeScript
+- Tailwind CSS
+- LocalStorage
+- Lucide React Icons
+- Vercel deployment ready
+
+## Folder Structure
+
+```text
+nsh-solarops/
+├── app/
+│   ├── (owner)/
+│   │   └── owner/
+│   │       ├── dashboard/
+│   │       ├── employees/
+│   │       ├── attendance/
+│   │       ├── customers/
+│   │       ├── inventory/
+│   │       ├── projects/
+│   │       ├── quotations/
+│   │       ├── invoices/
+│   │       ├── sales/
+│   │       ├── work/
+│   │       └── reports/
+│   ├── (employee)/
+│   │   └── employee/
+│   │       ├── dashboard/
+│   │       ├── customers/
+│   │       ├── inventory/
+│   │       ├── projects/
+│   │       ├── quotations/
+│   │       ├── invoices/
+│   │       └── sales/
+│   └── login/
+├── components/
+├── lib/
+├── public/
+├── types/
+├── package.json
+└── README.md
